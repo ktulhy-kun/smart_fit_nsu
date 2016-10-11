@@ -1,0 +1,22 @@
+body { background: url(images/pw_pattern.png); }
+
+
+uc { 
+    text-transform: uppercase;
+}
+lc { 
+   	text-transform: lowercase;
+}
+
+fs9 {
+    font-size: 9pt;
+}
+
+colhyp {
+    color: #000000;
+    text-decoration: none;
+}
+colhyp:hover {
+    color: #E67B23;
+    text-decoration: none;
+}
