@@ -12,3 +12,6 @@ https://ktulhykun.atlassian.net/secure/RapidBoard.jspa?rapidView=1&projectKey=SF
 
 ## GitHub
 https://github.com/ktulhy-kun/smart_fit_nsu
+
+## Запуск на локальной машине
+gunicorn manage:app
