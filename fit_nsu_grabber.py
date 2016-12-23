@@ -12,6 +12,13 @@ NEWS = '/news'
 http = urllib3.PoolManager()
 
 
+def check_find(l: list):
+    if 0 == len(l):
+        return None
+    else:
+        return l[0]
+
+
 class NewsParser:
     def __init__(self, domain: str, news: str):
         self.categories = []
@@ -23,12 +30,14 @@ class NewsParser:
         page = html.parse(self.news_page)
         print("Ok")
         categories_list = page.getroot().find_class('categories-list').pop()
-        categories_list = categories_list.getchildren()[0].getchildren()
-        for li in categories_list:
-            self.categories.append(Category(self.domain, li))
+        _ = check_find(categories_list.getchildren())
+        if _ is not None:
+            categories_list = _.getchildren()
+            for li in categories_list:
+                self.categories.append(Category(self.domain, li))
 
-        for category in self.categories:
-            category()
+            for category in self.categories:
+                category()
 
 
 class Category:
@@ -70,18 +79,29 @@ class NewsItem:
         a = tr.find(".//a")
         self.head = a.text.rstrip().lstrip()
         self.href = a.attrib['href']
-        self.date = tr.find_class('list-date')[0].text.rstrip().lstrip()
+        el = check_find(tr.find_class('list-date'))
+        if el is not None:
+            self.date = el.text.rstrip().lstrip()
         self.content = None  # type: Element
 
     def __call__(self):
         print("Get page {}".format(self.href))
         page = html.parse(self.domain + self.href)
         print("Ok")
-        content = page.getroot().find_class('item-page')[0]  # type: Element
+        content = check_find(page.getroot().find_class('item-page'))  # type: Element
+        if content is not None:
+            return
+
         h2 = content.find(".//h2")
-        dls = content.find_class("article-info")
+        dl = check_find(content.find_class("article-info"))  # type: Element
+        if dl is not None:
+            date_el = check_find(dl.find_class('modified'))
+            date = date_el.text.rstrip().lstrip()
+            print(date)
+            # f.e. 28.07.2016 12:20
+            self.date = datetime.strptime(date[10:], "%d.%m.%Y %H:%M")
         content.remove(h2)
-        for dl in dls:
+        if dl is not None:
             content.remove(dl)
         for tag in content.iter():  # type: Element
             if 'style' in tag.attrib:
