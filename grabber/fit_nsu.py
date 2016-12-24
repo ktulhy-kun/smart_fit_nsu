@@ -134,6 +134,10 @@ class NewsItem:
         if self.date is not None and news_item.date is not None:
             if datetime.date(self.date) <= datetime.date(news_item.date):
                 self.need_update = False
+
+        if not self.content:
+            self.need_update = True
+
         return news_item
 
     def __call__(self):
