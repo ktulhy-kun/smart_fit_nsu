@@ -8,7 +8,7 @@ from grabber import NewsParser
 
 
 # database prepare
-SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URI']
+SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
 Base.metadata.create_all(engine)
 
