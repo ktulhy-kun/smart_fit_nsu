@@ -47,14 +47,14 @@ class NewsParser:
 
 
 class Category:
-    def __init__(self, domain: str, li: HtmlElement, session, db=True):
+    def __init__(self, domain: str, li: HtmlElement, session):
         a = li.find(".//a")
         self.href = a.attrib['href']
         self.domain = domain
         self.name = a.text.rstrip().lstrip()  # type: str
         self.items = []
         self.s = session
-        if db:
+        if self.s:
             self.db_obj = self._work_db()
 
     def _work_db(self):
@@ -114,7 +114,8 @@ class NewsItem:
         self.content = None  # type: Element
         self.s = session
         self.need_update = True
-        self.db_obj = self._work_db()
+        if self.s:
+            self.db_obj = self._work_db()
 
     def _work_db(self):
         news_item = self.s.query(DBNewsItem).filter(self.href == DBNewsItem.href).all()
@@ -162,7 +163,8 @@ class NewsItem:
             # f.e. 28.07.2016 12:20
             try:
                 self.date = datetime.strptime(date[10:], "%d.%m.%Y %H:%M")
-                self.db_obj.date = self.date
+                if self.s:
+                    self.db_obj.date = self.date
             except ValueError:
                 print("Error while recognize date")
                 print_stack()
@@ -193,8 +195,9 @@ class NewsItem:
                 del tag.attrib['height']
 
         self.content = content
-        self.db_obj.content = str(self)
-        self.s.commit()
+        if self.s:
+            self.db_obj.content = str(self)
+            self.s.commit()
 
     def __str__(self):
         if self.content is not None:
