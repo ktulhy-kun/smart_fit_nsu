@@ -60,8 +60,22 @@ class DBNewsItem(db.Model):
 
 
 @app.route('/')
-def hello_world():
+def index():
     news = db.session.query(DBNewsItem).filter(DBNewsItem.date.isnot(None)).order_by(DBNewsItem.date.desc()).limit(20).all()
-    print(news)
+    categories = db.session.query(DBCategory).all()
+    print(categories)
     return render_template('index.html',
-                           news_list=news)
+                           news_list=news,
+                           categories=categories)
+
+
+@app.route('/tag/<int:_id>')
+def tag(_id):
+    category = db.session.query(DBCategory).get(_id)  # type: DBCategory
+
+    news = category.news  # type: list<DBNewsItem>
+
+    return render_template(
+        'index.html',
+        news_list=sorted(news, key=lambda n: n.date)[20:]
+    )
