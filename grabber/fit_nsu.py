@@ -47,14 +47,15 @@ class NewsParser:
 
 
 class Category:
-    def __init__(self, domain: str, li: HtmlElement, session):
+    def __init__(self, domain: str, li: HtmlElement, session, db=True):
         a = li.find(".//a")
         self.href = a.attrib['href']
         self.domain = domain
         self.name = a.text.rstrip().lstrip()  # type: str
         self.items = []
         self.s = session
-        self.db_obj = self._work_db()
+        if db:
+            self.db_obj = self._work_db()
 
     def _work_db(self):
         category = self.s.query(DBCategory).filter(self.href == DBCategory.href).all()
