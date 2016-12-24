@@ -103,7 +103,7 @@ class NewsItem:
         except Exception:
             self.id = 100000 + (hash(self.href) % (POSTGRES_INTEGER_MAX_RANGE - 100000))
         el = check_find(tr.find_class('list-date'))
-        self.date = None
+        self.date = None  # type: datetime.date
         if el is not None:
             date = el.text.rstrip().lstrip()
             try:
@@ -112,6 +112,7 @@ class NewsItem:
                 pass
         self.content = None  # type: Element
         self.s = session
+        self.need_update = True
         self.db_obj = self._work_db()
 
     def _work_db(self):
@@ -129,10 +130,18 @@ class NewsItem:
             self.s.commit()
         else:
             news_item = news_item[0]
+
+        if self.date is not None and news_item.date is not None:
+            if datetime.date(self.date) <= datetime.date(news_item.date):
+                self.need_update = False
         return news_item
 
     def __call__(self):
         print("Get page {}".format(self.href))
+        if not self.need_update:
+            print("Not need")
+            return
+
         page = html.parse(self.domain + self.href)
         print("Ok")
         content = check_find(page.getroot().find_class('item-page'))  # type: Element
