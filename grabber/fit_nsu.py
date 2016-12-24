@@ -135,7 +135,7 @@ class NewsItem:
             if datetime.date(self.date) <= datetime.date(news_item.date):
                 self.need_update = False
 
-        if not self.content:
+        if not news_item.content:
             self.need_update = True
 
         return news_item
