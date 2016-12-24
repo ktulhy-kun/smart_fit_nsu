@@ -14,7 +14,7 @@ association_table = \
           )
 
 
-class Category(Base):
+class DBCategory(Base):
     __tablename__ = "category"
 
     id = Column(Integer, primary_key=True)
@@ -31,7 +31,7 @@ class Category(Base):
         self.href = href
 
 
-class NewsItem(Base):
+class DBNewsItem(Base):
     __tablename__ = "newsitem"
     id = Column(Integer, primary_key=True)
     name = Column(String)

@@ -41,30 +41,38 @@
     <div class="col s8 offset-s2">
 
         {% for news in news_list %}
-            <div class="card grey lighten-3">
-                <div class="card-content black-text">
-                    <span class="card-title">Заголовок новости</span>
-                    <p>Краткое описание новости...</p>
-                </div>
+        <div class="card grey lighten-3">
+            <div class="card-content black-text">
+                <span class="card-title">{{ news.name }}</span>
+                {% autoescape false %}
+                <p>Обновлено: {{ news.date|string }}</p>
+                <hr>
+                <p>{{ news.content }}</p>
+                {% endautoescape %}
+            </div>
 
-                <div class="card-action">
-                    <div class="row">
-                        <ul>
-                            <div class="col s7">
+            <div class="card-action">
+                <div class="row">
+                    <ul>
+                        <div class="col s7">
                     <span class="thecategory">
                       <i class="tiny material-icons">label_outline</i>
-                      <a href="#" rel="category tag"><pr><raz><colhyp>тег1</colhyp></raz></pr></a>, <a href="#" rel="category tag"><pr><raz><colhyp>тег2</colhyp></raz></pr></a>
+                        {% for category in news.categories %}
+                            <a href="/tag/{{ category.id }}" rel="category tag"><pr><raz><colhyp>
+                                {{ category.name }}
+                            </colhyp></raz></pr></a>
+                        {% endfor %}
                     </span>
-                            </div>
-                            <div class="col s5" hidden>
-                                <p align="right"><a class="waves-effect waves-light btn"><i class="material-icons right">trending_flat</i><raz>Читать далее</raz></a></p>
-                            </div>
-                        </ul>
-                    </div>
-
+                        </div>
+                        <div class="col s5" hidden>
+                            <p align="right"><a class="waves-effect waves-light btn"><i class="material-icons right">trending_flat</i><raz>Читать далее</raz></a></p>
+                        </div>
+                    </ul>
                 </div>
 
             </div>
+
+        </div>
         {% endfor %}
 
         <ul class="pagination" hidden>

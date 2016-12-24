@@ -8,7 +8,7 @@ from lxml.html import HtmlElement
 
 import urllib3
 
-from .db import Category as DBCategory, NewsItem as DBNewsItem
+from .db import DBCategory as DBCategory, DBNewsItem as DBNewsItem
 
 http = urllib3.PoolManager()
 
