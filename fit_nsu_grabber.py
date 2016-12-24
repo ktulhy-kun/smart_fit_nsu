@@ -9,7 +9,7 @@ from grabber import NewsParser
 
 # database prepare
 SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
